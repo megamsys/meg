@@ -8,30 +8,18 @@ name = "meg"
 path = "src/meg/lib.rs"
 
 [dependencies]
-toml = "0.1.20"
-semver = "0.1.19"
 curl = "0.2.8"
-tar = "0.2.9"
-flate2 = "0.2.6"
-git2 = "0.2.9"
-glob = "0.2.10"
-time = "0.1.24"
-log = "0.3.1"
-env_logger = "0.3"
-docopt = "0.6.62"
-url = "0.2.29"
-rustc-serialize = "0.3.12"
-term = "0.2.7"
-regex = "0.1.29"
-threadpool = "0.1.4"
-libc = "0.1.6"
-registry = { path = "src/registry" }
+turbo = " 0.2.0"
+api = { path = "src/api" }
 num_cpus = "0.1"
 
 
 [dev-dependencies]
 tempdir = "0.3.4"
-hamcrest = { git = "https://github.com/carllerche/hamcrest-rust.git" }
+
+[dependencies.hamcrest]
+
+git = "https://github.com/carllerche/hamcrest-rust.git"
 
 [[bin]]
 name = "meg"
