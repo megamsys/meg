@@ -23,7 +23,6 @@ pub mod util;
 
 pub fn version() -> String {
 
-
     println!("Commencing yak shaving for 0$ {}", env!("MEG_PKG_VERSION_MAJOR"));
 
     format!("meg {}", match option_env!("CFG_VERSION") {
