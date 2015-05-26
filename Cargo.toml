@@ -10,7 +10,6 @@ path = "src/meg/lib.rs"
 [dependencies]
 curl = "0.2.8"
 rust-turbo = " 0.2.0"
-api = { path = "src/api" }
 num_cpus = "0.1"
 
 
