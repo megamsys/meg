@@ -1,10 +1,14 @@
-#![cfg_attr(unix, feature(fs_ext))]
+//#![cfg_attr(unix, feature(fs_ext))]
 
-extern crate turbo;
+//#![feature(fs, fs_time, fs_ext)]
+
+
 extern crate env_logger;
 extern crate rustc_serialize;
 extern crate toml;
-#[macro_use] extern crate log;
+extern crate turbo;
+extern crate meg;
+//#[macro_use] extern crate log;
 
 use std::collections::BTreeSet;
 use std::env;
@@ -13,9 +17,23 @@ use std::io;
 use std::path::{PathBuf, Path};
 use std::process::Command;
 
-use turbo::{execute_main_without_stdin, handle_error, shell};
+use turbo::turbo::{execute_main_without_stdin, handle_error, shell};
 use turbo::core::MultiShell;
-use turbo::util::{CliError, CliResult, lev_distance, Config};
+use turbo::util::{CliError, CliResult, Config};
+use meg::util::{lev_distance};
+
+#[derive(RustcDecodable)]
+#[derive(RustcEncodable)]
+
+
+
+struct Flags {
+    flag_list: bool,
+    flag_verbose: bool,
+    arg_command: String,
+    arg_args: Vec<String>,
+}
+
 
 const USAGE: &'static str = "
 Megam command line
@@ -70,9 +88,9 @@ fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
         "" | "help" if flags.arg_args.is_empty() => {
             config.shell().set_verbose(true);
             let args = &["meg".to_string(), "-h".to_string()];
-            let r = turbo::call_main_without_stdin(execute, config, USAGE, args,
+            let r = turbo::turbo::call_main_without_stdin(execute, config, USAGE, args,
                                                    false);
-            turbo::process_executed(r, &mut config.shell());
+            turbo::turbo::process_executed(r, &mut config.shell());
             return Ok(None)
         }
 
@@ -100,11 +118,11 @@ fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
         if args[1] == stringify!($name).replace("_", "-") {
             mod $name;
             config.shell().set_verbose(true);
-            let r = turbo::call_main_without_stdin($name::execute, config,
+            let r = turbo::turbo::call_main_without_stdin($name::execute, config,
                                                    $name::USAGE,
                                                    &args,
                                                    false);
-            turbo::process_executed(r, &mut config.shell());
+            turbo::turbo::process_executed(r, &mut config.shell());
             return Ok(None)
         }
     ) }
@@ -200,10 +218,12 @@ fn list_commands() -> BTreeSet<String> {
 
 #[cfg(unix)]
 fn is_executable(path: &Path) -> bool {
-    use std::os::unix::prelude::*;
-    fs::metadata(path).map(|m| {
-        m.permissions().mode() & 0o001 == 0o001
-    }).unwrap_or(false)
+    //use std::os::unix;
+ //use std::sys::ext;
+    //fs::metadata(path).map(|m| {
+//        m.permissions() == 0o001
+//    }).unwrap_or(false)
+return true
 }
 #[cfg(windows)]
 fn is_executable(path: &Path) -> bool {
