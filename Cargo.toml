@@ -8,10 +8,14 @@ name = "meg"
 path = "src/meg/lib.rs"
 
 [dependencies]
-curl = "0.2.8"
-rust-turbo = " 0.2.0"
+curl = "0.2.10"
+rust_cli = "0.1.0"
 num_cpus = "0.1"
-
+docopt = "0.6.64"
+env_logger = "0.3.1"
+rustc-serialize = "0.3.14"
+toml = "0.1.20"
+libc = "0.1.8"
 
 [dev-dependencies]
 tempdir = "0.3.4"
