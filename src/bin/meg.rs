@@ -57,12 +57,15 @@ See 'meg help <command>' for more information on a specific command.
 
 fn main() {
     env_logger::init().unwrap();
-    execute_main_without_stdin(execute, true, USAGE)
+    execute_main_without_stdin(execute, true, USAGE);
 }
 
 macro_rules! each_subcommand{ ($mac:ident) => ({
-//    $mac!(clean);
     $mac!(version);
+    $mac!(help);
+    $mac!(ahoy);
+    $mac!(account);
+    $mac!(sshkey);
 }) }
 
 /**
@@ -72,11 +75,10 @@ macro_rules! each_subcommand{ ($mac:ident) => ({
 */
 fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
     config.shell().set_verbose(flags.flag_verbose);
-
     if flags.flag_list {
         println!("Installed Commands:");
         for command in list_commands().into_iter() {
-            println!("    {}", command);
+            println!("{}", command);
         };
         return Ok(None)
     }
@@ -90,6 +92,7 @@ fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
             let args = &["meg".to_string(), "-h".to_string()];
             let r = turbo::turbo::call_main_without_stdin(execute, config, USAGE, args,
                                                    false);
+
             turbo::turbo::process_executed(r, &mut config.shell());
             return Ok(None)
         }

@@ -27,8 +27,8 @@ pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
 pub fn version() -> String {
 
     //println!("Commencing yak shaving for 0$ {}", option_env!("MEG_PKG_VERSION_MAJOR"));
-println!("Inside version-");
-    format!("meg {}", match option_env!("CFG_VERSION") {
+//println!("Inside version----------00000000000000000000000000000000000000--->>s");
+    format!("Megam Cloud CLI {} - Deploy apps/services seamlessly", match option_env!("CFG_VERSION") {
         Some(s) =>  s.to_string(),
         None    =>   format!("{}.{}.{}{}",
                         env!("CARGO_PKG_VERSION_MAJOR"),
