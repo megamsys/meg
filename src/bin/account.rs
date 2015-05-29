@@ -32,7 +32,7 @@ Options:
 
 
 pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
-    println!("executing; cmd=meg-version; args={:?}", env::args().collect::<Vec<_>>());
+    println!("executing; cmd=meg-account; args={:?}", env::args().collect::<Vec<_>>());
 
 
     let opts = Account {
@@ -62,20 +62,13 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
         }
       }
          } else if x == "--show" {
-
-        //Show(opts).map(|_| None).map_err(|err| {
-        //CliError::from_boxed(err, 101)
-    //})
      }
  }
 
     println!("{:?}", vec[2]);
     println!("{:?}",  env::args().collect::<Vec<_>>());
 
-    //match vec {
-    //     "--create" => println!("Create--->"),
-    //     "--show"   => println!("Show--->"),
-    //}
+
 return Ok(None)
 
 }
