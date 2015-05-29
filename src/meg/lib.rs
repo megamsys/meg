@@ -5,11 +5,13 @@
 #[cfg(test)] extern crate hamcrest;
 //#[macro_use] extern crate log;
 extern crate docopt;
+extern crate megam_api;
 
 //use std::env;
 //use std::error::Error;
 //use std::io::prelude::*;
 //use std::io;
+
 
 
 //pub use util::{TurboError, CliError, CliResult, human, Config, ChainError};

@@ -14,7 +14,7 @@ pub struct AccountFields {
 
 
 pub struct AccountCreateFields {
-    email: Option<String>,
+ pub email: Option<String>,
     //first_name: Option<String>,
     //last_name: Option<String>,
     //phone: Option<String>,
