@@ -1,12 +1,21 @@
 extern crate megam_api;
+extern crate rand;
+extern crate rustc_serialize;
 
-
+use self::rustc_serialize::base64::{ToBase64, STANDARD};
 use std::env;
 use std::io;
 use std::io::prelude::*;
+use std::fs::File;
+use std::path::Path;
+use std::fs::OpenOptions;
+use std::io::BufWriter;
+use self::rand::{OsRng, Rng};
+
 use self::megam_api::util::accounts::Account;
 use self::megam_api::util::accounts::Success;
 //use megam_api::util::accounts::Error;
+
 
 use turbo;
 use turbo::util::{CliResult, CliError, Config};
@@ -25,7 +34,7 @@ Usage:
 
 Options:
     -h, --help               Print this message
-    --create                  Provide an email to create a new account
+    --create              Provide an email to create a new account
     --show                   Provide an email to show the account
     -v, --verbose            Use verbose output
 ";
@@ -55,7 +64,20 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
         println!("{:?}", out);
         match out {
         Ok(v) => {
-            println!("success");
+            println!("{:?}", v);
+            let mut email = &opts.email;
+
+            let mut rng = match OsRng::new() {
+                    Ok(g) => g,
+                    Err(e) => panic!("Failed to obtain OS RNG: {}", e)
+                };
+                let mut config = STANDARD;
+                let mut num:String = rng.next_u64().to_string();
+                let mut api_key:String = num.as_bytes().to_base64(config);
+                let mut api_key = &api_key;
+
+            createFile(email, api_key)
+
         }
         Err(e) => {
             println!("error parsing header");
@@ -65,10 +87,23 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
      }
  }
 
-    println!("{:?}", vec[2]);
-    println!("{:?}",  env::args().collect::<Vec<_>>());
-
-
 return Ok(None)
+
+}
+
+pub fn createFile(e: &String, a: &String) {
+    let path = Path::new("/home/yeshwanth/megam.toml");
+            let mut options = OpenOptions::new();
+            options.write(true).create(true);
+            //let file: Result<File, Error> = options.open(path);
+            let file = match options.open(path) {
+                Ok(file) => file,
+                Err(..) => panic!("Something is wrong!"),
+             };
+             let data = format!("email = {:?}\napi_key = {:?}", e, a);
+             println!("{:?}", data);
+          let mut writer = BufWriter::new(&file);
+          writer.write(data.as_bytes());
+
 
 }
