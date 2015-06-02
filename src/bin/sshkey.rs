@@ -74,6 +74,7 @@ pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
             Host: "http://localhost:9000".to_string(),
             Version: "/v2".to_string(),
             };
+            println!("{:?}", json::encode(&apiObj).unwrap());
 
             let out = opts.list(json::encode(&apiObj).unwrap());
 

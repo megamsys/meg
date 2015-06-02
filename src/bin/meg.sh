@@ -50,7 +50,7 @@ set_globals() {
 
     # Data locations
     version_file="$meg_dir/version"
-    temp_dir="$meg/tmp"
+    temp_dir="$meg_dir/tmp"
     dl_dir="$meg_dir/dl"
 
     flag_verbose=false
@@ -63,7 +63,7 @@ set_globals() {
 
 # Ensures that ~/.megam exists and uses the correct format
 initialize_metadata() {
-    local _disable_sudo="$1"
+
 
     verbose_say "checking metadata version"
 
@@ -86,20 +86,18 @@ initialize_metadata() {
     ensure mkdir -p "$meg_dir"
     meg_dir="$(abs_path "$rustup_dir")"
     assert_nz "$meg_dir" "meg_dir"
-
+  fi
 }
 
 handle_command_line_args() {
-    local _save="$default_save"
+
     local _date=""
     local _prefix="$default_prefix"
     local _help=false
 
     for arg in "$@"; do
 	     case "$arg" in
-	        --save )
-		        _save=true
-		          ;;
+	       
 	      --help )
 		      _help=true
 		        ;;
@@ -144,22 +142,14 @@ handle_command_line_args() {
 	get_tty_confirmation
     fi
 
-    # All work is done in the ~/.megam dir, which will be deleted
-    # afterward if the user doesn't pass --save. *If* ~/.megam
-    # already exists and they *did not* pass --save, we'll pretend
-    # they did anyway to avoid deleting their data.
-    local _preserve_meg_dir="$_save"
-    if [ "$_save" = false -a -e "$version_file" ]; then
-	verbose_say "rustup home exists but not asked to save. saving anyway"
-	_preserve_meg_dir=true
-    fi
+  
 
     # Make sure our data directory exists and is the right format
     initialize_metadata
 
     # OK, time to do the things
     local _succeeded=true
-	  install_toolchain_from_dist "$_prefix" "$_save"
+	  install_toolchain_from_dist "$_prefix" 
 
    if [ $? != 0 ]; then
 	    _succeeded=false
@@ -168,12 +158,7 @@ handle_command_line_args() {
 
     # Remove the temporary  directory.
     # This will not happen if we hit certain hard errors earlier.
-    if [ "$_preserve_meg_dir" = false ]; then
-	verbose_say "removing meg home $meg_dir"
-	ensure rm -R "$meg_dir"
-    else
-	verbose_say "leaving meg home $rustup_dir"
-    fi
+   
 
     if [ "$_succeeded" = false ]; then
 	exit 1
@@ -247,7 +232,7 @@ EOF
 # Returns 0 on success, 1 on error
 install_toolchain_from_dist() {
     local _prefix="$1"
-    local _save="$2"
+
 
 
     local _potential_oldmeg_bin="$_prefix/bin/meg"
@@ -256,7 +241,7 @@ install_toolchain_from_dist() {
 	say_err "installing meg will replace the old meg."
     fi
 
-    determine_remote_rust_installer_location  || return 1
+    determine_remote_meg_installer_location  || return 1
     local _remote_meg_installer="$RETVAL"
     assert_nz "$_remote_meg_installer" "remote meg installer"
     verbose_say "remote meg installer location: $_remote_meg_installer"
@@ -268,13 +253,13 @@ install_toolchain_from_dist() {
     say "downloading ..."
     download_and_check "$_remote_meg_installer"
 
-    if [ "$_retval" != 0 ]; then
-	     return 1
-    fi
+    #if [ "$_retval" != 0 ]; then
+#	     return 1
+  #	  fi
     local _installer_file="$RETVAL"
-    local _installer_cache="$RETVAL_CACHE"
+
     assert_nz "$_installer_file" "installer_file"
-    assert_nz "$_installer_cache" "installer_cache"
+
 
     # Create a temp directory to put the downloaded toolchain
     make_temp_dir
@@ -320,11 +305,11 @@ install_toolchain() {
 
     # Install the toolchain
     local _toolchain_dir="$_prefix"
-    verbose_say "installing toolchain to '$_toolchain_dir'"
-    say "installing toolchain for '$_toolchain'"
+    verbose_say "installing meg to '$_toolchain_dir'"
+    say "installing meg"
 
     if [ $? != 0 ]; then
-	verbose_say "failed to install toolchain"
+	verbose_say "failed to install meg"
 	return 1
     fi
 
@@ -348,7 +333,7 @@ get_remote_installer_location() {
     assert_nz "$_arch" "arch"
 
 	if [ $? = 0 ]; then
-		    RETVAL="$dist_server/$_dist_dir/$_package_name-(nightly).*$_arch\.tar\.gz"
+		    RETVAL="$dist_server/$_dist_dir/$_package_name-nightly.$_arch.tar.gz"
   else
     err "couldn't find remote installer for '$_arch'. contact support@megam.io."
     return
@@ -465,7 +450,7 @@ get_architecture() {
 # update hash.
 download_and_check() {
     local _remote_name="$1"
-    local _quiet="$2"
+
 
     local _remote_basename="$(basename "$_remote_name")"
 
@@ -474,13 +459,13 @@ download_and_check() {
     assert_nz "$_workdir" "workdir"
     verbose_say "download work dir: $_workdir"
 
-    download_file "$_remote_name" "$_workdir" "$_quiet"
+    download_file "$_remote_name" "$_workdir" 
     if [ $? != 0 ]; then
       ignore rm -R "$_workdir"
 	    return 1
     fi
 
-    RETVAL="$_work_dir/$_remote_basename"
+    RETVAL="$_workdir/$_remote_basename"
 
 }
 
@@ -488,7 +473,7 @@ download_and_check() {
 download_file() {
     local _remote_name="$1"
     local _local_dirname="$2"
-    local _quiet="$3"
+
 
     local _remote_basename="$(basename "$_remote_name")"
     assert_nz "$_remote_basename" "remote basename"
@@ -497,11 +482,8 @@ download_file() {
 
     verbose_say "downloading '$_remote_name' to '$_local_name'"
     # Invoke curl in a way that will resume if necessary
-    if [ "$_quiet" = false ]; then
 	(run cd "$_local_dirname" && run curl -# -C - -f -O "$_remote_name")
-    else
-	(run cd "$_local_dirname" && run curl -s -C - -f -O "$_remote_name")
-    fi
+   
     if [ $? != 0 ]; then
 	say_err "couldn't download '$_remote_name'"
 	return 1

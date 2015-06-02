@@ -5,14 +5,14 @@ extern crate rustc_serialize;
 
 use std::fs::File;
 use std::result::Result as StdResult;
-use std::error;
+//use std::error;
 use std::error::Error;
-use self::rustc_serialize::Decodable;
-use self::rustc_serialize::Decoder;
-use self::rustc_serialize::json;
-use self::rustc_serialize::json::Json;
+//use self::rustc_serialize::Decodable;
+//use self::rustc_serialize::Decoder;
+//use self::rustc_serialize::json;
+//use self::rustc_serialize::json::Json;
 use std::io::Read;
-use std::io::{BufReader,BufRead};
+//use std::io::{BufReader,BufRead};
 
 pub struct Configz {
     pub rand:  String
@@ -65,11 +65,11 @@ macro_rules! cli_try {
 pub type CliResult<T> = StdResult<T, CliError>;
 
 impl CliError {
-    fn from_err(err: &Error) -> CliError {
-        CliError {
-            desc: err.description().to_string()
-        }
-    }
+    //fn from_err(err: &Error) -> CliError {
+    //    CliError {
+    //        desc: err.description().to_string()
+    //    }
+    //}
 }
 
 
