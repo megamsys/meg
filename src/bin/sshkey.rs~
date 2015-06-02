@@ -1,0 +1,78 @@
+extern crate megam_api;
+
+use toml;
+use std::env;
+use std::fs::File;
+use std::io::Read;
+use std::io::{BufReader,BufRead};
+use std::str;
+
+
+
+use turbo;
+use turbo::util::{CliResult, Config};
+use self::megam_api::util::sshkeys::SSHKey;
+use self::megam_api::util::sshkeys::Success;
+
+
+
+
+#[derive(RustcDecodable)]
+struct Options;
+
+pub const USAGE: &'static str = "
+Usage:
+    meg sshkey [options]
+
+
+Options:
+    -h, --help              Print this message
+    --list                  List SSHKeys
+";
+
+
+pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
+    println!("executing; cmd=meg-sshkey; args={:?}", env::args().collect::<Vec<_>>());
+
+//read from file
+        //let data = ReadFile();
+
+
+        let opts = SSHKey {
+           name:   format!("{}", "Megam"),
+           accounts_id: format!("{}", "Systems"),
+           path: format!("{}", "00"),
+        };
+        let vec = env::args().collect::<Vec<_>>();
+    //for x in vec.iter() {
+    /*        if x == "--create" {
+
+            let out = opts.create();
+
+        match out {
+        Ok(v) => {
+            println!("success");
+        }
+        Err(e) => {
+            println!("Error parsing header");
+          }
+        }} else if x == "--list" { */
+
+
+           let mut file = File::open("/home/yeshwanth/megam.toml").unwrap();
+          let mut data = Vec::new();
+    (file.read_to_end(&mut data);
+            let content = str::from_utf8(&data as &[u8]);
+            match content {
+                 Ok(v) =>  println!("{:?}", v),
+                 Err(err) => println!("Error-------------->"),
+            };
+            //let parser = toml::Parser::new(content);
+            println!("works!! ");
+
+
+
+return Ok(None)
+
+
+}

@@ -1,6 +1,8 @@
 extern crate megam_api;
 extern crate rand;
 extern crate rustc_serialize;
+extern crate term_painter;
+
 
 use self::rustc_serialize::base64::{ToBase64, STANDARD};
 use std::env;
@@ -12,9 +14,15 @@ use std::fs::OpenOptions;
 use std::io::BufWriter;
 use self::rand::{OsRng, Rng};
 
+use self::term_painter::ToStyle;
+use self::term_painter::Color::*;
+use self::term_painter::Attr::*;
+
+use self::megam_api::api::Api;
 use self::megam_api::util::accounts::Account;
-use self::megam_api::util::accounts::Success;
-//use megam_api::util::accounts::Error;
+use self::rustc_serialize::json;
+use self::megam_api::api::Options as api_options;
+
 
 
 use turbo;
@@ -25,7 +33,7 @@ use meg::ops;
 
 #[derive(RustcDecodable)]
 pub struct Options {
-arg_email: String,
+pub arg_email: String,
 }
 
 pub const USAGE: &'static str = "
@@ -43,29 +51,21 @@ Options:
 pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
     println!("executing; cmd=meg-account; args={:?}", env::args().collect::<Vec<_>>());
 
+        let apiObj = api_options {
+            Email: "c@b.com".to_string(),
+            Apikey: "firsttest".to_string(),
+            Host: "http://localhost:9000".to_string(),
+            Version: "/v2".to_string(),
+            };
+            println!("{:?}", json::encode(&apiObj).unwrap());
 
-    let opts = Account {
-        first_name:     format!("{}", "Megam"),
-        last_name:      format!("{}", "Systems"),
-        phone:          format!("{}", "00"),
-        email:          options.arg_email,
-        api_key:        format!("{}", "apikey007"),
-        password:       format!("{}", "password"),
-        authority:      format!("{}", "password1"),
-        password_reset_key: format!("{}", "somekey"),
-        password_reset_sent_at: format!("{}", "somesentat"),
-    };
-    let vec = env::args().collect::<Vec<_>>();
-    for x in vec.iter() {
+            let mut opts = Account::new();
+             //need to assign value
+             opts.email = options.arg_email;
+
+         let vec = env::args().collect::<Vec<_>>();
+      for x in vec.iter() {
         if x == "--create" {
-
-        let out = opts.create();   //.map(|_| None).map_err(|err| {
-        //CliError::from_boxed(err, 101)
-        println!("{:?}", out);
-        match out {
-        Ok(v) => {
-            println!("{:?}", v);
-            let mut email = &opts.email;
 
             let mut rng = match OsRng::new() {
                     Ok(g) => g,
@@ -74,13 +74,28 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
                 let mut config = STANDARD;
                 let mut num:String = rng.next_u64().to_string();
                 let mut api_key:String = num.as_bytes().to_base64(config);
+
+
+
+            opts.api_key = api_key.to_string();
+            let out = opts.create(json::encode(&apiObj).unwrap());
+             match out {
+              Ok(v) => {
+               println!("{}",
+            Green.bold().paint("Hurray!! Account is created! "));
+            let mut email = &opts.email.to_string();
+
+
                 let mut api_key = &api_key;
 
             createFile(email, api_key)
 
         }
         Err(e) => {
-            println!("error parsing header");
+            println!("{}",
+            Red.bold().paint("Oops! account was not created. "));
+            println!("{:?}",
+            Red.bold().paint(e));
         }
       }
          } else if x == "--show" {
@@ -100,8 +115,10 @@ pub fn createFile(e: &String, a: &String) {
                 Ok(file) => file,
                 Err(..) => panic!("Something is wrong!"),
              };
-             let data = format!("email = {:?}\napi_key = {:?}", e, a);
-             println!("{:?}", data);
+             let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}", e, a);
+             println!("{}",
+             Blue.paint("'megam.toml' file is created in your home directory"));
+
           let mut writer = BufWriter::new(&file);
           writer.write(data.as_bytes());
 

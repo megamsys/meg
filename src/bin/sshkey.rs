@@ -1,4 +1,9 @@
 extern crate megam_api;
+extern crate term_painter;
+extern crate meg;
+extern crate rustc_serialize;
+//extern crate core;
+
 
 use toml;
 use std::env;
@@ -6,14 +11,24 @@ use std::fs::File;
 use std::io::Read;
 use std::io::{BufReader,BufRead};
 use std::str;
+use std::path::Path;
+
+
+use self::term_painter::ToStyle;
+use self::term_painter::Color::*;
+use self::term_painter::Attr::*;
 
 
 
 use turbo;
-use turbo::util::{CliResult, Config};
-use self::megam_api::util::sshkeys::SSHKey;
-use self::megam_api::util::sshkeys::Success;
+use turbo::util::{CliResult, Config, TurboResult};
 
+use self::megam_api::api::Api;
+use self::megam_api::api::Options as api_options;
+use self::megam_api::util::sshkeys::SSHKey;
+use self::rustc_serialize::json;
+
+use self::meg::util::parse_toml::Configz;
 
 
 
@@ -34,86 +49,47 @@ Options:
 pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
     println!("executing; cmd=meg-sshkey; args={:?}", env::args().collect::<Vec<_>>());
 
-//read from file
-        //let data = ReadFile();
 
+   let mut opts = SSHKey::new();
 
-        let opts = SSHKey {
-           name:   format!("{}", "Megam"),
-           accounts_id: format!("{}", "Systems"),
-           path: format!("{}", "00"),
-        };
         let vec = env::args().collect::<Vec<_>>();
-        for x in vec.iter() {
-            if x == "--create" {
+    for x in vec.iter() {
+       if x == "--create" {
 
-            let out = opts.create();
-        match out {
-        Ok(v) => {
-            println!("success");
+       } else if x == "--list" {
+            println!("{}",
+            Green.bold().paint("Listing SSHKey"));
+
+            let mut path = Path::new("/home/yeshwanth/megam.toml").to_str().unwrap();
+            let we = Configz { rand: "sample".to_string()};
+            let data = we.load(path);
+
+            let value: toml::Value = data.unwrap();
+            let email = value.lookup("account.email").unwrap();
+            let api_key = value.lookup("account.api_key").unwrap();
+
+            let apiObj = api_options {
+            Email: email.to_string(),
+            Apikey: api_key.to_string(),
+            Host: "http://localhost:9000".to_string(),
+            Version: "/v2".to_string(),
+            };
+
+            let out = opts.list(json::encode(&apiObj).unwrap());
+
+            match out {
+                Ok(v) => {
+                    println!("{:?}", v);
+                }
+
+                Err(e) => {
+                    println!("{:?}", e);
+                    println!("{}",
+                    Red.bold().paint("Error: Not able to list"));
+
+                    }
+               };
         }
-        Err(e) => {
-            println!("Error parsing header");
-          }
-        }} else if x == "--list" {
-
-            let mut file = match File::open("/home/yeshwanth/megam.toml") {
-             Ok(file) => file,
-             Err(..)  => panic!("Shoot!"),
-         };
-
-             let mut reader = BufReader::new(file);
-             //let mut xs: Vec<&String> = Vec::new();
-            // for x in 0..2 {
-        /*   let mut buffer_string = Vec::new();
-            try!(reader.read_to_end(&mut buffer_string));
-             println!("{:?}", buffer_string);
-             let buffer_string = str::from_utf8(buffer_string);
-            let path = "test";
-             */
-            //let temp = buffer_string;
-            //xs.push(buffer_string);
-            //let length = temp.len();
-            // let value = temp.slice_to( length - 2 );
-            //parse_again(&buffer_string, &path);
-            //let mut parser = toml::Parser::new(buffer_string);
-        //}
-
-
-    /*  let mut data = Vec::new();
-       let x = (file.read_to_end(&mut data));
-         println!("{:?}", x);
-        // let contents = str::from_utf8(&data);
-         parse(&data); */
-
-
-           }
-
-   }
-
-return Ok(None)
-
+     }
+ return Ok(None)
 }
-/*
-pub fn parse(data: &[u8]) -> &str {
-    //let data = str::from_utf8(&data);
-    //data.unwrap();
-     parse_first(&data);
-}
-/
-pub fn parse_first(data: &[u8]) {
-    let data = str::from_utf8(&data);
-    parse_again(data);
-}
-
-pub fn parse_again(data: &str, file: &str) -> Result<toml::Table> {
-    let mut parser = toml::Parser::new(&data);
-
-    match parser.parse() {
-
-        Some(data) => println!("Finallyyy------>>"),
-        None => {},
-    }
-    Err();
-
-} */
