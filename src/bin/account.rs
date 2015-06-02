@@ -1,6 +1,8 @@
 extern crate megam_api;
 extern crate rand;
 extern crate rustc_serialize;
+extern crate term_painter;
+
 
 use self::rustc_serialize::base64::{ToBase64, STANDARD};
 use std::env;
@@ -11,6 +13,10 @@ use std::path::Path;
 use std::fs::OpenOptions;
 use std::io::BufWriter;
 use self::rand::{OsRng, Rng};
+
+use self::term_painter::ToStyle;
+use self::term_painter::Color::*;
+use self::term_painter::Attr::*;
 
 use self::megam_api::util::accounts::Account;
 use self::megam_api::util::accounts::Success;
@@ -42,6 +48,8 @@ Options:
 
 pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
     println!("executing; cmd=meg-account; args={:?}", env::args().collect::<Vec<_>>());
+    //let mut options = HashMap::<String, String>::new();
+        // options.insert("email", options.arg_email);
 
 
     let opts = Account {
@@ -55,16 +63,17 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
         password_reset_key: format!("{}", "somekey"),
         password_reset_sent_at: format!("{}", "somesentat"),
     };
+
     let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {
         if x == "--create" {
 
         let out = opts.create();   //.map(|_| None).map_err(|err| {
         //CliError::from_boxed(err, 101)
-        println!("{:?}", out);
         match out {
         Ok(v) => {
-            println!("{:?}", v);
+            println!("{}",
+            Green.bold().paint("Hurray!! Account is created! "));
             let mut email = &opts.email;
 
             let mut rng = match OsRng::new() {
@@ -80,7 +89,8 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
 
         }
         Err(e) => {
-            println!("error parsing header");
+            println!("{}",
+            Red.bold().paint("Oops! account was not created. "));
         }
       }
          } else if x == "--show" {
@@ -100,8 +110,10 @@ pub fn createFile(e: &String, a: &String) {
                 Ok(file) => file,
                 Err(..) => panic!("Something is wrong!"),
              };
-             let data = format!("email = {:?}\napi_key = {:?}", e, a);
-             println!("{:?}", data);
+             let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}", e, a);
+             println!("{}",
+             Blue.paint("'megam.toml' file is created in your home directory"));
+
           let mut writer = BufWriter::new(&file);
           writer.write(data.as_bytes());
 
