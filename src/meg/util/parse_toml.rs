@@ -1,4 +1,4 @@
-/*
+
 extern crate toml;
 extern crate rustc_serialize;
 
@@ -14,7 +14,9 @@ use self::rustc_serialize::json::Json;
 use std::io::Read;
 use std::io::{BufReader,BufRead};
 
-pub struct Config;
+pub struct Configz {
+    pub rand:  String
+}
 
 
 #[derive(Debug)]
@@ -71,8 +73,8 @@ impl CliError {
 }
 
 
-impl Config {
-    pub fn load(path: &str) -> Result<Config, CliError> {
+impl Configz {
+    pub fn load(&self, path: &str) -> Result<toml::Value ,CliError>  {
         let mut file = cli_try!(
             File::open(path),
             "failed to open config at `{}`: {}",
@@ -80,6 +82,7 @@ impl Config {
         let mut buf = String::new();
         file.read_to_string(&mut buf).unwrap();
         let result: Result<toml::Value, Vec<toml::ParserError>> = buf.parse();
+        println!("{:?}", result);
         let value: toml::Value = try!(result.map_err(|errs| {
             let mut desc = String::new();
             for err in errs {
@@ -88,13 +91,7 @@ impl Config {
             }
             CliError { desc: desc }
         }));
-        let mut profile_name = "Account";
-        let profile = cli_opt!(
-            value.lookup(profile_name),
-            "no profile found for {}",
-            profile_name);
-               let mut decoder = toml::Decoder::new(profile.clone());
-               Ok(cli_try!(Config::decode(&mut decoder)))
+
+               Ok(value)
     }
 }
-*/

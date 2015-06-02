@@ -1,6 +1,7 @@
 extern crate megam_api;
 extern crate term_painter;
 extern crate meg;
+extern crate rustc_serialize;
 //extern crate core;
 
 
@@ -21,10 +22,13 @@ use self::term_painter::Attr::*;
 
 use turbo;
 use turbo::util::{CliResult, Config, TurboResult};
-use self::megam_api::util::sshkeys::SSHKey;
-//use self::megam_api::util::sshkeys::Success;
 
-//use meg::util::parse_toml::Config;
+use self::megam_api::api::Api;
+use self::megam_api::api::Options as api_options;
+use self::megam_api::util::sshkeys::SSHKey;
+use self::rustc_serialize::json;
+
+use self::meg::util::parse_toml::Configz;
 
 
 
@@ -45,51 +49,47 @@ Options:
 pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
     println!("executing; cmd=meg-sshkey; args={:?}", env::args().collect::<Vec<_>>());
 
-//read from file
-        //let data = ReadFile();
 
+   let mut opts = SSHKey::new();
 
-    /*    let opts = SSHKey {
-           name:   format!("{}", "Megam"),
-           accounts_id: format!("{}", "Systems"),
-           path: format!("{}", "00"),
-        }; 
         let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {
-           if x == "--create" {
+       if x == "--create" {
 
-            //let out = opts.create();
-
-        match out {
-        Ok(v) => {
-            println!("success");
-            println!("{}",
-            Green.bold().paint("Hurray!! SSHKey is created! "));
-        }
-        Err(e) => {
-            println!("Error parsing header");
-          }
-        }} else if x == "--list" {
+       } else if x == "--list" {
             println!("{}",
             Green.bold().paint("Listing SSHKey"));
-           let mut file = File::open("/home/yeshwanth/megam.toml");
-          // let mut we = Config;
-            //   we.load(file);
-         /* let mut data = Vec::new();
-           file.read_to_end(&mut data);
-            let content = str::from_utf8(&data as &[u8]);
-            match content {
-                 Ok(v) =>  println!("{:?}", v),
-                 Err(err) => println!("Error-------------->"),
+
+            let mut path = Path::new("/home/yeshwanth/megam.toml").to_str().unwrap();
+            let we = Configz { rand: "sample".to_string()};
+            let data = we.load(path);
+
+            let value: toml::Value = data.unwrap();
+            let email = value.lookup("account.email").unwrap();
+            let api_key = value.lookup("account.api_key").unwrap();
+
+            let apiObj = api_options {
+            Email: email.to_string(),
+            Apikey: api_key.to_string(),
+            Host: "http://localhost:9000".to_string(),
+            Version: "/v2".to_string(),
             };
-            let parser = toml::Parser::new(content); */
-            println!("works!! ");
 
+            let out = opts.list(json::encode(&apiObj).unwrap());
 
-    }
-}
+            match out {
+                Ok(v) => {
+                    println!("{:?}", v);
+                }
 
-return Ok(None)
+                Err(e) => {
+                    println!("{:?}", e);
+                    println!("{}",
+                    Red.bold().paint("Error: Not able to list"));
 
-*/
+                    }
+               };
+        }
+     }
+ return Ok(None)
 }
