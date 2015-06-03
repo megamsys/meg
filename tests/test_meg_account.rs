@@ -1,5 +1,3 @@
-extern crate support;
-
 use support::{project, execs};
 use hamcrest::assert_that;
 use turbo;
