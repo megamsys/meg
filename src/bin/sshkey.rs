@@ -29,17 +29,15 @@ Options:
 
 
 pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
-    println!("executing; cmd=meg-sshkey; args={:?}", env::args().collect::<Vec<_>>());
 
 
 
-        let vec = env::args().collect::<Vec<_>>();
+    let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {
        if x == "--create" {
 
        } else if x == "--list" {
-            println!("{}",
-            Green.bold().paint("Listing SSHKey"));
+            
             let x = list::SSHkeyoption;
             x.list();
 
