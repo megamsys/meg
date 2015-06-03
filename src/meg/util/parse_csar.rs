@@ -1,17 +1,19 @@
 
-extern crate toml;
+extern crate yaml_rust;
 extern crate rustc_serialize;
-
 
 use std::fs::File;
 use std::result::Result as StdResult;
 use std::error::Error;
+use std::io::BufReader;
+use std::str::from_utf8;
+
+use self::yaml_rust::{YamlLoader, YamlEmitter};
+
 
 use std::io::Read;
 
-pub struct Configz {
-    pub rand:  String
-}
+pub struct CConfig;
 
 
 #[derive(Debug)]
@@ -68,24 +70,28 @@ impl CliError {
 }
 
 
-impl Configz {
-    pub fn load(&self, path: &str) -> Result<toml::Value ,CliError>  {
+impl CConfig {
+    pub fn load(&self, path: &str) -> Result<String ,CliError>  {
         let mut file = cli_try!(
             File::open(path),
             "failed to open config at `{}`: {}",
             path);
         let mut buf = String::new();
         file.read_to_string(&mut buf).unwrap();
-        let result: Result<toml::Value, Vec<toml::ParserError>> = buf.parse();
-        println!("--->>{:?}", result);
-        let value: toml::Value = try!(result.map_err(|errs| {
+        println!("Inhere----------------->>");
+        //let mut reader = BufReader::new(buf.as_bytes());
+        //let mut data = from_utf8(buf.as_bytes());
+        //let result = YamlLoader::load_from_str(from_utf8(buf.as_bytes()).unwrap()).unwrap();
+        /*let value = try!(result.map_err(|errs| {
             let mut desc = String::new();
             for err in errs {
                 desc.push_str(err.description());
                 desc.push('\n');
             }
             CliError { desc: desc }
-        }));
-       Ok(value)
+        })); */
+        println!("Inhere-------gonna return---------->>");
+
+       Ok(buf)
     }
 }

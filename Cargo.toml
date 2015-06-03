@@ -16,7 +16,7 @@ env_logger = "0.3.1"
 rustc-serialize = "0.3.14"
 toml = "0.1.20"
 libc = "0.1.8"
-megam_api = "0.1.5"
+megam_api = "0.1.8"
 rand = "0.3.8"
 term-painter = "0.1.1"
 
@@ -26,6 +26,9 @@ tempdir = "0.3.4"
 [dependencies.hamcrest]
 
 git = "https://github.com/carllerche/hamcrest-rust.git"
+
+[dependencies.yaml-rust]
+git = "https://github.com/chyh1990/yaml-rust.git"
 
 [[bin]]
 name = "meg"
