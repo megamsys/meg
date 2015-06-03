@@ -39,6 +39,7 @@ impl Createoptions {
 
 
    pub fn create(&self) {
+       
     let apiObj = api_options {
         Email: "c@b.com".to_string(),
         Apikey: "firsttest".to_string(),
@@ -83,7 +84,6 @@ pub fn createFile(e: &String, a: &String) {
     let path = Path::new("/home/yeshwanth/megam.toml");
             let mut options = OpenOptions::new();
             options.write(true).create(true);
-            //let file: Result<File, Error> = options.open(path);
             let file = match options.open(path) {
                 Ok(file) => file,
                 Err(..) => panic!("Something is wrong!"),

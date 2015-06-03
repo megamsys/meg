@@ -24,7 +24,7 @@ Usage:
 
 Options:
     -h, --help               Print this message
-    --create                Provide an email to create a new account
+    --create                 Provide an email to create a new account
     --show                   Provide an email to show the account
     -v, --verbose            Use verbose output
 ";
