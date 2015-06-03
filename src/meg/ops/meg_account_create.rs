@@ -26,6 +26,7 @@ use self::megam_api::api::Api;
 use self::megam_api::util::accounts::Account;
 use self::rustc_serialize::json;
 use self::megam_api::api::Options as api_options;
+use util::header_hash as head;
 
 
 #[derive(PartialEq, Clone, Debug)]
@@ -39,37 +40,30 @@ impl Createoptions {
 
 
    pub fn create(&self) {
-       
+
     let apiObj = api_options {
-        Email: "c@b.com".to_string(),
-        Apikey: "firsttest".to_string(),
+        Email: "sample@megam.io".to_string(),
+        Apikey: "APIKEYMEGAMIO".to_string(),
         Host: "http://localhost:9000".to_string(),
         Version: "/v2".to_string(),
         };
-        println!("{:?}", json::encode(&apiObj).unwrap());
 
-        let mut opts = Account::new();
 
+         let mut opts = Account::new();
          opts.email = self.email.clone();
 
-    let mut rng = match OsRng::new() {
-            Ok(g) => g,
-            Err(e) => panic!("Failed to obtain OS RNG: {}", e)
-        };
-        let mut config = STANDARD;
-        let mut num:String = rng.next_u64().to_string();
-        let mut api_key:String = num.as_bytes().to_base64(config);
+         let mut api_key = apikeyGen();
 
-     opts.api_key = api_key.to_string();
-     let out = opts.create(json::encode(&apiObj).unwrap());
-      match out {
-        Ok(v) => {
-         println!("{}",
-     Green.bold().paint("Hurray!! Account is created! "));
-     let mut email = &opts.email.to_string();
-     let mut api_key = &api_key;
+        opts.api_key = api_key.to_string();
+        let out = opts.create(json::encode(&apiObj).unwrap());
+        match out {
+          Ok(v) => {
+          println!("{}",
+        Green.bold().paint("Hurray!! Account is created! "));
+        println!("{}",
+      Green.bold().paint(v));
 
-     createFile(email, api_key)
+     createFile(&opts.email.to_string(), &api_key)
 }
     Err(e) => {
         println!("{}",
@@ -80,6 +74,18 @@ impl Createoptions {
    }
 }
 
+pub fn apikeyGen() -> String {
+
+    let mut rng = match OsRng::new() {
+            Ok(g) => g,
+            Err(e) => panic!("Failed to obtain OS RNG: {}", e)
+        };
+        let mut config = STANDARD;
+        let mut num:String = rng.next_u64().to_string();
+        let mut api_key:String = num.as_bytes().to_base64(config);
+        return api_key
+
+}
 pub fn createFile(e: &String, a: &String) {
     let path = Path::new("/home/yeshwanth/megam.toml");
             let mut options = OpenOptions::new();

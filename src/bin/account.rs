@@ -31,7 +31,6 @@ Options:
 
 
 pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
-    println!("executing; cmd=meg-account; args={:?}", env::args().collect::<Vec<_>>());
 
          let vec = env::args().collect::<Vec<_>>();
       for x in vec.iter() {
