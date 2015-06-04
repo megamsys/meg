@@ -19,6 +19,41 @@
 
 set -u # Undefined variables are errors
 
+txtblk='\e[0;30m' # Black - Regular
+txtred='\e[0;31m' # Red
+txtgrn='\e[0;32m' # Green
+txtylw='\e[0;33m' # Yellow
+txtblu='\e[0;34m' # Blue
+txtpur='\e[0;35m' # Purple
+txtcyn='\e[0;36m' # Cyan
+txtwht='\e[0;37m' # White
+bldblk='\e[1;30m' # Black - Bold
+bldred='\e[1;31m' # Red
+bldgrn='\e[1;32m' # Green
+bldylw='\e[1;33m' # Yellow
+bldblu='\e[1;34m' # Blue
+bldpur='\e[1;35m' # Purple
+bldcyn='\e[1;36m' # Cyan
+bldwht='\e[1;37m' # White
+unkblk='\e[4;30m' # Black - Underline
+undred='\e[4;31m' # Red
+undgrn='\e[4;32m' # Green
+undylw='\e[4;33m' # Yellow
+undblu='\e[4;34m' # Blue
+undpur='\e[4;35m' # Purple
+undcyn='\e[4;36m' # Cyan
+undwht='\e[4;37m' # White
+bakblk='\e[40m'   # Black - Background
+bakred='\e[41m'   # Red
+bakgrn='\e[42m'   # Green
+bakylw='\e[43m'   # Yellow
+bakblu='\e[44m'   # Blue
+bakpur='\e[45m'   # Purple
+bakcyn='\e[46m'   # Cyan
+bakwht='\e[47m'   # White
+txtrst='\e[0m'    # Text Reset
+
+
 main() {
     assert_cmds
     set_globals
@@ -51,7 +86,6 @@ set_globals() {
     # Data locations
     version_file="$meg_dir/version"
     temp_dir="$meg_dir/tmp"
-    dl_dir="$meg_dir/dl"
 
     flag_verbose=false
     flag_yes=false
@@ -97,7 +131,7 @@ handle_command_line_args() {
 
     for arg in "$@"; do
 	     case "$arg" in
-	       
+
 	      --help )
 		      _help=true
 		        ;;
@@ -114,7 +148,7 @@ handle_command_line_args() {
 		    ;;
 
 	    --version)
-		echo "meg.sh $version"
+    	echo -e "${bldwht}meg.sh $version${txtrst}"
 		  exit 0
 		;;
 
@@ -142,27 +176,20 @@ handle_command_line_args() {
 	get_tty_confirmation
     fi
 
-  
+
 
     # Make sure our data directory exists and is the right format
     initialize_metadata
 
     # OK, time to do the things
     local _succeeded=true
-	  install_toolchain_from_dist "$_prefix" 
+	  install_toolchain_from_dist "$_prefix"
 
    if [ $? != 0 ]; then
 	    _succeeded=false
+      exit 1
 	   fi
 
-
-    # Remove the temporary  directory.
-    # This will not happen if we hit certain hard errors earlier.
-   
-
-    if [ "$_succeeded" = false ]; then
-	exit 1
-    fi
 }
 
 is_value_arg() {
@@ -196,34 +223,17 @@ validate_date() {
 print_welcome_message() {
     local _prefix="$1"
 
-    cat <<EOF
+    say "cli installer."
 
-Welcome to Meg.
-EOF
 
 	if [ "$(id -u)" = 0 ]; then
-	    cat <<EOF
-
-WARNING: This script appears to be running as root. While it will work
-correctly, it is no longer necessary for meg.sh to run as root.
-EOF
+      printf "${txtylw}%s:${txtrst}:${bldcyn}%s${txtrst}\n" "WARNING" "This script appears to be running as root. While it will work";
+      printf "${bldcyn}%s${txtrst}\n" "correctly, it is no longer necessary for meg.sh to run as root."
 	fi
 
+  printf "${txtcyn}%s:${txtrst}\n" "This script will download the meg cli, and install them to $_prefix";
+  printf "${txtcyn}%s${txtrst}\n" "You may uninstall later by deleting  $_prefix"
 
-	cat <<EOF
-
-This script will download the Meg cli, and install them to $_prefix
-You may install elsewhere by running this script with the --prefix=<path> option.
-EOF
-
-
-
-	cat <<EOF
-
-You may uninstall later by deleting  $_prefix/bin/meg
-EOF
-
-    echo
 }
 
 
@@ -232,8 +242,6 @@ EOF
 # Returns 0 on success, 1 on error
 install_toolchain_from_dist() {
     local _prefix="$1"
-
-
 
     local _potential_oldmeg_bin="$_prefix/bin/meg"
     if [ -e "$_potential_oldmeg_bin" ]; then
@@ -260,12 +268,9 @@ install_toolchain_from_dist() {
 
     assert_nz "$_installer_file" "installer_file"
 
-
-    # Create a temp directory to put the downloaded toolchain
-    make_temp_dir
-    local _workdir="$RETVAL"
+    local _workdir="$RETVAL_WORK"
     assert_nz "$_workdir" "workdir"
-    verbose_say "install work dir: $_workdir"
+    verbose_say "install tmp dir: $_workdir"
 
     # There next few statements may all fail independently.
     local _failing=false
@@ -273,9 +278,14 @@ install_toolchain_from_dist() {
     install_toolchain "$_installer_file" "$_workdir" "$_prefix"
 
     if [ $? != 0 ]; then
-	say_err "failed to install toolchain"
+	say_err "failed to install meg"
 	_failing=true
     fi
+
+say "installed successfully."
+printf "$bldwht%s$txtrst: $bldylw%s$txtrst\n" "meg" "change .bashrc PATH="'$PATH'":~/bin";
+printf "$bldwht%s$txtrst: $bldylw%s$txtrst\n" "meg" "Refer:  http://docs.megam.io/v1.0/docs/megam_quick_launch";
+printf "$txtgrn%s$txtrst\n" "bye :)"
 
     run rm -R "$_workdir"
     if [ $? != 0 ]; then
@@ -305,8 +315,10 @@ install_toolchain() {
 
     # Install the toolchain
     local _toolchain_dir="$_prefix"
-    verbose_say "installing meg to '$_toolchain_dir'"
+    verbose_say "installing meg to '$_prefix'"
+
     say "installing meg"
+    cp $_installer_dir/meg $_prefix
 
     if [ $? != 0 ]; then
 	verbose_say "failed to install meg"
@@ -459,14 +471,14 @@ download_and_check() {
     assert_nz "$_workdir" "workdir"
     verbose_say "download work dir: $_workdir"
 
-    download_file "$_remote_name" "$_workdir" 
+    download_file "$_remote_name" "$_workdir"
     if [ $? != 0 ]; then
       ignore rm -R "$_workdir"
 	    return 1
     fi
 
     RETVAL="$_workdir/$_remote_basename"
-
+    RETVAL_WORK="$_workdir"
 }
 
 
@@ -483,7 +495,7 @@ download_file() {
     verbose_say "downloading '$_remote_name' to '$_local_name'"
     # Invoke curl in a way that will resume if necessary
 	(run cd "$_local_dirname" && run curl -# -C - -f -O "$_remote_name")
-   
+
     if [ $? != 0 ]; then
 	say_err "couldn't download '$_remote_name'"
 	return 1
@@ -509,7 +521,7 @@ get_tty_confirmation() {
     echo
 
     if [ "$_yn" != "y" -a "$_yn" != "Y" -a "$_yn" != "yes" ]; then
-	say "cancelling"
+	say "cancelled."
 	exit 0
     fi
 }
@@ -529,7 +541,7 @@ Options:
 # Standard utilities
 
 say() {
-    echo "meg: $1"
+    printf "${bldwht}meg:${txtrst} ${txtylw}%-s${txtrst}\n" "$1";
 }
 
 say_err() {
