@@ -29,11 +29,12 @@ impl SSHkeyoption {
       let mut opts = SSHKey::new();
       let mut apiObj = head::apiObj().unwrap();
       let out = opts.list(json::encode(&apiObj).unwrap());
-
+     println!("---------------------------{:?}", out);
     match out {
        Ok(v) => {
            println!("{:?}",
            Green.bold().paint(v));
+           //println!("{:?}", v.as_slice());
     }
 
     Err(e) => {

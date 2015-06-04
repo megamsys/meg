@@ -34,8 +34,6 @@ pub struct Createoptions {
 pub email: String,
 }
 
-
-
 impl Createoptions {
 
 
@@ -48,10 +46,9 @@ impl Createoptions {
         Version: "/v2".to_string(),
         };
 
-
          let mut opts = Account::new();
          opts.email = self.email.clone();
-
+         opts.password = "123".to_string();
          let mut api_key = apikeyGen();
 
         opts.api_key = api_key.to_string();
@@ -59,9 +56,9 @@ impl Createoptions {
         match out {
           Ok(v) => {
           println!("{}",
-        Green.bold().paint("Hurray!! Account is created! "));
+         Green.bold().paint("Hurray!! Account is created! May the force be with you. "));
         println!("{}",
-      Green.bold().paint(v));
+        Green.bold().paint(v));
 
      createFile(&opts.email.to_string(), &api_key)
 }
@@ -105,7 +102,6 @@ pub fn createFile(e: &String, a: &String) {
 }
 
 impl CreateAcc for Createoptions {
-    // Replace `Self` with the implementor type: `Account`
     fn new() -> Createoptions {
         Createoptions { email: "".to_string() }
     }

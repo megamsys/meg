@@ -78,7 +78,6 @@ impl CConfig {
             path);
         let mut buf = String::new();
         file.read_to_string(&mut buf).unwrap();
-        println!("Inhere----------------->>");
         //let mut reader = BufReader::new(buf.as_bytes());
         //let mut data = from_utf8(buf.as_bytes());
         //let result = YamlLoader::load_from_str(from_utf8(buf.as_bytes()).unwrap()).unwrap();
@@ -90,7 +89,6 @@ impl CConfig {
             }
             CliError { desc: desc }
         })); */
-        println!("Inhere-------gonna return---------->>");
 
        Ok(buf)
     }

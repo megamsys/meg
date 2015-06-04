@@ -35,12 +35,9 @@ pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
     let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {
        if x == "--create" {
-
        } else if x == "--list" {
-            
             let x = list::SSHkeyoption;
             x.list();
-
         }
      }
  return Ok(None)

@@ -7,6 +7,10 @@ use std::env;
 use turbo;
 use turbo::util::{CliResult, Config};
 use self::meg::ops::meg_csar_create as csar_create;
+use self::meg::ops::meg_csar_list as list;
+use self::meg::ops::meg_csar_push as push;
+
+
 
 #[derive(RustcDecodable)]
 struct Options {
@@ -17,6 +21,7 @@ struct Options {
 pub const USAGE: &'static str = "
 Usage:
     meg csar [options] [<file>]
+
 
 Options:
     -h, --help              Print this message
@@ -33,19 +38,25 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
 
     let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {
-        if x == "--create" { println!("yes,, creates!");
+        if x == "--create" {
         let mut csar: csar_create::Csar_Coptions  = csar_create::CreateCSAR::new();
         csar.file = options.arg_file.clone();
         let mut x = csar.create();
+        }
+
+        else if x == "--list" {
+            let csarObj = list::Csaroptions;
+            csarObj.list();
+        }
+        
+        else if x == "--push" {
+
+             let mut Cpush: push::Csaroptions  = push::PushCsar::new();
+             Cpush.id = options.arg_file.clone();
+             let mut x = Cpush.push();
 
 
         }
-        else if x == "--list" {println!("yes,, lists!");}
-        else if x == "--push" {println!("yes,, pushes!");}
-
-
     }
-
-
     Ok(None)
 }
