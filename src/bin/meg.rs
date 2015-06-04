@@ -66,6 +66,7 @@ macro_rules! each_subcommand{ ($mac:ident) => ({
     $mac!(ahoy);
     $mac!(account);
     $mac!(sshkey);
+    $mac!(csar);
 }) }
 
 /**
