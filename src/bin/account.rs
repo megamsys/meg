@@ -40,8 +40,8 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
              let mut x = acct.create();
 
         } else if x == "--show" {
-            let mut acct: Show::Showoptions  = Show::ShowAcc::new();
-            acct.email = options.arg_email.clone();
+            let mut acct: Show::Showoptions  = Show::ShowAcc::new(); //Not reqd - to expand later if
+            acct.email = options.arg_email.clone();                  //multiple accounts needs to be showed
             let mut x = acct.show();
 
      }

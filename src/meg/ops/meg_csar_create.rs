@@ -29,6 +29,8 @@ use self::term_painter::Attr::*;
 use megam_api::api::Api;
 use self::megam_api::api::Options as api_options;
 use self::megam_api::util::csars::Csar;
+use util::header_hash as head;
+
 
 use self::rustc_serialize::json;
 use self::yaml_rust::{YamlLoader, YamlEmitter};
@@ -54,29 +56,11 @@ impl Csar_Coptions {
     let mut path = Path::new(file).to_str().unwrap();
     let we = CConfig;
     let data = we.load(path);
-     println!("{:?}", data);
+       let mut opts = Csar::new();
+      let mut apiObj = head::apiObj().unwrap();
 
-//this needs to be moved
-     let mut path = Path::new("/home/yeshwanth/megam.toml").to_str().unwrap();
-     let we = Configz { rand: "sample".to_string()};
-     let userData = we.load(path);
-     let value: toml::Value = userData.unwrap();
-     let email = value.lookup("account.email").unwrap().as_str().unwrap();
-     let api_key = value.lookup("account.api_key").unwrap().as_str().unwrap();
-//------->
-
-            let apiObj = api_options {
-            Email: email.to_string(),
-            Apikey: api_key.to_string(),
-            Host: "http://localhost:9000".to_string(),
-            Version: "/v2".to_string(),
-             };
-           println!("{:?}", json::encode(&apiObj).unwrap());
-           let mut opts = Csar::new();
            opts.desc = data.unwrap();
-           println!("-------------------------?>>>>>------------------------->>>>>");
            let out = opts.create(json::encode(&apiObj).unwrap());
-           println!("-------------------------------------------------->>>>>");
            match out {
               Ok(v) => {
                println!("{:?}", v);
