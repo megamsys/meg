@@ -32,6 +32,8 @@ impl Showoptions {
           Ok(v) => {
           println!("{}",
           Green.bold().paint("Showing your account! "));
+          println!("{:?}",
+          Green.bold().paint(v));
        }
          Err(e) => {
           println!("{}",

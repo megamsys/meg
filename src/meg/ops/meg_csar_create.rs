@@ -13,24 +13,22 @@ use self::term_painter::ToStyle;
 use self::term_painter::Color::*;
 
 use megam_api::api::Api;
-use self::megam_api::api::Options as api_options;
 use self::megam_api::util::csars::Csar;
 use util::header_hash as head;
 
 
 use self::rustc_serialize::json;
-use self::yaml_rust::{YamlLoader, YamlEmitter};
 use std::str::from_utf8;
 
 
 #[derive(PartialEq, Clone, Debug)]
-pub struct Csar_Coptions {
+pub struct CsarCoptions {
 pub file: String,
 }
 
 
 
-impl Csar_Coptions {
+impl CsarCoptions {
 
 
    pub fn create(&self) {
@@ -41,7 +39,7 @@ impl Csar_Coptions {
     let we = CConfig;
     let data = we.load(path);
        let mut opts = Csar::new();
-      let mut api_call = head::api_call().unwrap();
+      let api_call = head::api_call().unwrap();
 
            opts.desc = data.unwrap();
            let out = opts.create(json::encode(&api_call).unwrap());
@@ -59,10 +57,10 @@ impl Csar_Coptions {
 }
 
 
-impl CreateCSAR for Csar_Coptions {
+impl CreateCSAR for CsarCoptions {
     // Replace `Self` with the implementor type: `Account`
-    fn new() -> Csar_Coptions {
-        Csar_Coptions { file: "".to_string() }
+    fn new() -> CsarCoptions {
+        CsarCoptions { file: "".to_string() }
     }
 
 }

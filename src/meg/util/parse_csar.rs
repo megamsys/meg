@@ -5,9 +5,6 @@ extern crate rustc_serialize;
 use std::fs::File;
 use std::result::Result as StdResult;
 
-use self::yaml_rust::{YamlLoader, YamlEmitter};
-
-
 use std::io::Read;
 
 pub struct CConfig;

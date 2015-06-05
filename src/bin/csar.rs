@@ -12,7 +12,7 @@ use self::meg::ops::meg_csar_push as push;
 #[derive(RustcDecodable)]
 struct Options {
     arg_file:    String,
-    flag_list:   bool,
+
 }
 
 pub const USAGE: &'static str = "
@@ -36,9 +36,9 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
     let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {
         if x == "--create" {
-        let mut csar: csar_create::Csar_Coptions  = csar_create::CreateCSAR::new();
+        let mut csar: csar_create::CsarCoptions  = csar_create::CreateCSAR::new();
         csar.file = options.arg_file.clone();
-        let x = csar.create();
+        csar.create();
         }
 
         else if x == "--list" {
@@ -48,9 +48,9 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
 
         else if x == "--push" {
 
-             let mut Cpush: push::Csaroptions  = push::PushCsar::new();
-             Cpush.id = options.arg_file.clone();
-             let  x = Cpush.push();
+             let mut c_push: push::Csaroptions  = push::PushCsar::new();
+             c_push.id = options.arg_file.clone();
+             c_push.push();
 
 
         }

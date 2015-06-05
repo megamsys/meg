@@ -7,8 +7,8 @@ extern crate term_painter;
 extern crate toml;
 
 use std::path::Path;
-use std::fs::OpenOptions;
 use std::result::Result as StdResult;
+use std::env;
 
 use util::parse_toml::Configz;
 use self::megam_api::api::Options as api_options;
@@ -30,16 +30,12 @@ impl CliError {
 
 pub fn api_call() -> Result<api_options, CliError> {
 
-<<<<<<< HEAD
 
-let mut x = env::home_dir().unwrap();
-let mut y = x.to_str().unwrap();
-let setPath = format!("{}/megam.toml", y.to_string());
+let x = env::home_dir().unwrap();
+let y = x.to_str().unwrap();
+let set_path = format!("{}/megam.toml", y.to_string());
 
-let mut path = Path::new(&setPath).to_str().unwrap();
-=======
-let path = Path::new("/home/yeshwanth/megam.toml").to_str().unwrap();
->>>>>>> origin/master
+let path = Path::new(&set_path).to_str().unwrap();
 let we = Configz { rand: "sample".to_string()};
 let data = we.load(path);
 
