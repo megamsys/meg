@@ -1,14 +1,7 @@
-//extern crate libc;
 extern crate curl;
 
 use std::env;
 
-//extern {
-//    fn main(input: libc::c_int) -> libc::c_int;
-//}
-
-
-use turbo;
 use turbo::util::{CliResult, Config};
 
 pub const USAGE: &'static str = "

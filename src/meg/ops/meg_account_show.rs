@@ -5,23 +5,8 @@ extern crate rustc_serialize;
 extern crate term_painter;
 extern crate toml;
 
-use self::rustc_serialize::base64::{ToBase64, STANDARD};
-use std::env;
-use std::io;
-use std::io::prelude::*;
-use std::fs::File;
-use std::path::Path;
-use std::fs::OpenOptions;
-use std::io::BufWriter;
-use std::marker::Copy;
-use std::clone::Clone;
-
-
-use self::rand::{OsRng, Rng};
-
 use self::term_painter::ToStyle;
 use self::term_painter::Color::*;
-use self::term_painter::Attr::*;
 
 use megam_api::api::Api;
 use self::megam_api::util::accounts::Account;
@@ -40,9 +25,9 @@ impl Showoptions {
 
    pub fn show(&self) {
 
-       let mut opts = Account::new();
-       let mut apiObj = head::apiObj().unwrap();
-       let out = opts.show(json::encode(&apiObj).unwrap());
+       let opts = Account::new();
+       let api_call = head::api_call().unwrap();
+       let out = opts.show(json::encode(&api_call).unwrap());
         match out {
           Ok(v) => {
           println!("{}",

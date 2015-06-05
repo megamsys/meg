@@ -3,8 +3,7 @@ extern crate meg;
 use std::env;
 use std::clone::Clone;
 
-use turbo;
-use turbo::util::{CliResult, CliError, Config};
+use turbo::util::{CliResult, Config};
 use self::meg::ops::meg_account_create as Act;
 use self::meg::ops::meg_account_show as Show;
 
@@ -37,12 +36,12 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
         if x == "--create" {
              let mut acct: Act::Createoptions  = Act::CreateAcc::new();
              acct.email = options.arg_email.clone();
-             let mut x = acct.create();
+             let x = acct.create();
 
         } else if x == "--show" {
             let mut acct: Show::Showoptions  = Show::ShowAcc::new(); //Not reqd - to expand later if
             acct.email = options.arg_email.clone();                  //multiple accounts needs to be showed
-            let mut x = acct.show();
+            let x = acct.show();
 
      }
  }
