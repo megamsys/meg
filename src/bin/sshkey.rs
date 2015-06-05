@@ -6,12 +6,7 @@ use std::env;
 
 use self::meg::ops::meg_sshkey_list as list;
 
-use self::term_painter::ToStyle;
-use self::term_painter::Color::*;
-use self::term_painter::Attr::*;
-
-use turbo;
-use turbo::util::{CliResult, Config, TurboResult};
+use turbo::util::{CliResult, Config};
 
 
 #[derive(RustcDecodable)]

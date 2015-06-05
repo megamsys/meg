@@ -4,9 +4,6 @@ extern crate rustc_serialize;
 
 use std::fs::File;
 use std::result::Result as StdResult;
-use std::error::Error;
-use std::io::BufReader;
-use std::str::from_utf8;
 
 use self::yaml_rust::{YamlLoader, YamlEmitter};
 

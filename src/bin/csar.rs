@@ -1,10 +1,7 @@
 extern crate meg;
 
-
-
 use std::env;
 
-use turbo;
 use turbo::util::{CliResult, Config};
 use self::meg::ops::meg_csar_create as csar_create;
 use self::meg::ops::meg_csar_list as list;
@@ -41,19 +38,19 @@ pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
         if x == "--create" {
         let mut csar: csar_create::Csar_Coptions  = csar_create::CreateCSAR::new();
         csar.file = options.arg_file.clone();
-        let mut x = csar.create();
+        let x = csar.create();
         }
 
         else if x == "--list" {
-            let csarObj = list::Csaroptions;
-            csarObj.list();
+            let list_csars = list::Csaroptions;
+            list_csars.list();
         }
-        
+
         else if x == "--push" {
 
              let mut Cpush: push::Csaroptions  = push::PushCsar::new();
              Cpush.id = options.arg_file.clone();
-             let mut x = Cpush.push();
+             let  x = Cpush.push();
 
 
         }

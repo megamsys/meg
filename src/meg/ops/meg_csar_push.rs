@@ -6,29 +6,13 @@ extern crate term_painter;
 extern crate yaml_rust;
 extern crate toml;
 
-use self::rustc_serialize::base64::{ToBase64, STANDARD};
-use std::env;
-use std::io;
-use std::io::prelude::*;
-use std::fs::File;
-use std::path::Path;
-use std::fs::OpenOptions;
-use std::io::BufWriter;
-use std::marker::Copy;
-use std::clone::Clone;
-
-
-use self::rand::{OsRng, Rng};
-
 use self::term_painter::ToStyle;
 use self::term_painter::Color::*;
-use self::term_painter::Attr::*;
 
 use megam_api::api::Api;
 use self::megam_api::util::csars::Csar;
 use self::rustc_serialize::json;
 use util::header_hash as head;
-use util::parse_csar::CConfig;
 use std::str::from_utf8;
 
 
@@ -42,10 +26,9 @@ impl Csaroptions {
 
     pub fn push(&self) {
         let data = from_utf8(self.id.as_bytes()).unwrap();
-        let mut opts = Csar::new();
-        let mut apiObj = head::apiObj().unwrap();
-        println!("--0-0-0-0-0-0-0-0--{:?}", data);
-        let out = opts.push(json::encode(&apiObj).unwrap(), data.to_string());
+        let  opts = Csar::new();
+        let  api_call = head::api_call().unwrap();
+        let out = opts.push(json::encode(&api_call).unwrap(), data.to_string());
          match out {
            Ok(v) => {
            println!("{}",
