@@ -8,6 +8,7 @@ use self::rustc_serialize::base64::{ToBase64, STANDARD};
 use std::io::prelude::*;
 use std::path::Path;
 use std::fs::OpenOptions;
+use self::megam_api::util::errors::MegResponse;
 use std::io::BufWriter;
 use std::clone::Clone;
 use std::env;
@@ -51,18 +52,17 @@ impl Createoptions {
         let out = opts.create(json::encode(&api_call).unwrap());
         match out {
           Ok(v) => {
-          println!("{}",
-         Green.bold().paint("Hurray!! Account is created! May the force be with you. "));
+        let x = json::decode::<MegResponse>(&v).unwrap();
         println!("{}",
-        Green.bold().paint(v));
+        Green.paint("Successfully created your Account"));
+
+       println!("----\nCode: {:?}\nMessage: {:?}\n----", x.code, x.msg);
 
      create_file(&opts.email.to_string(), &api_key)
 }
     Err(e) => {
         println!("{}",
         Red.bold().paint("Oops! account was not created. "));
-        println!("{:?}",
-        Red.bold().paint(e));
     }}
    }
 }

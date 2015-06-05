@@ -27,7 +27,7 @@ impl SSHkeyoption {
     match out {
        Ok(v) => {
           println!("{}",
-           Green.bold().paint("\t\t\t\tListing your SSHKeys\n"));
+           Green.bold().paint("SSHKeys\n"));
            let mut a = Printer::new();
            let mut header = Vec::new();
            header.push("Name".to_string());
@@ -47,11 +47,9 @@ impl SSHkeyoption {
              a.set_body(parent);
 
              println!("{:?}", a);
-           //println!("{:?}", v.as_slice());
     }
 
     Err(e) => {
-        println!("{:?}", e);
         println!("{}",
         Red.bold().paint("Error: Not able to list"));
     }};
