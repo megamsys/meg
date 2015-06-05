@@ -44,7 +44,6 @@ impl Showoptions {
 
 
 impl ShowAcc for Showoptions {
-    // Replace `Self` with the implementor type: `Account`
     fn new() -> Showoptions {
         Showoptions { email: "".to_string() }
     }

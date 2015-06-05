@@ -10,6 +10,8 @@ use std::path::Path;
 use std::fs::OpenOptions;
 use std::io::BufWriter;
 use std::clone::Clone;
+use std::str::from_utf8;
+
 
 use self::rand::{OsRng, Rng};
 
@@ -22,6 +24,7 @@ use self::rustc_serialize::json;
 use self::megam_api::api::Options as api_options;
 
 
+
 #[derive(PartialEq, Clone, Debug)]
 pub struct Createoptions {
 pub email: String,
@@ -32,17 +35,28 @@ impl Createoptions {
 
    pub fn create(&self) {
 
+<<<<<<< HEAD
+   let mut api_key = apikeyGen();
+
+    let apiObj = api_options {
+        Email: self.email.to_string(),
+        Apikey: api_key.to_string(),
+=======
     let api_call = api_options {
         Email: "sample@megam.io".to_string(),
         Apikey: "APIKEYMEGAMIO".to_string(),
+>>>>>>> origin/master
         Host: "http://localhost:9000".to_string(),
         Version: "/v2".to_string(),
         };
 
          let mut opts = Account::new();
          opts.email = self.email.clone();
+<<<<<<< HEAD
+=======
          opts.password = "123".to_string();
          let api_key = api_keygen();
+>>>>>>> origin/master
 
         opts.api_key = api_key.to_string();
         let out = opts.create(json::encode(&api_call).unwrap());
@@ -76,15 +90,23 @@ pub fn api_keygen() -> String {
         return api_key
 
 }
-pub fn create_file(e: &String, a: &String) {
-    let path = Path::new("/home/yeshwanth/megam.toml");
+pub fn createFile(e: &String, a: &String) {
+
+let mut x = env::home_dir().unwrap();
+let mut y = x.to_str().unwrap();
+let setPath = format!("{}/megam.toml", y.to_string());
+
+    let path = Path::new(&setPath);
+
             let mut options = OpenOptions::new();
             options.write(true).create(true);
             let file = match options.open(path) {
                 Ok(file) => file,
                 Err(..) => panic!("Something is wrong!"),
              };
-             let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}", e, a);
+             let mut host = "http://localhost:9000".to_string();
+             let mut version = "/v2".to_string();
+             let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}\n\n[api]\n\nhost = {:?}\nversion = {:?}", e, a, host, version);
              println!("{}",
              Blue.paint("'megam.toml' file is created in your home directory"));
 
