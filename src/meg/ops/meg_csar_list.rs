@@ -16,8 +16,8 @@ impl Csaroptions {
 
     pub fn list(&self) {
 
-        let mut opts = Csar::new();
-        let mut api_call = head::api_call().unwrap();
+        let opts = Csar::new();
+        let api_call = head::api_call().unwrap();
         let out = opts.list(json::encode(&api_call).unwrap());
 
 
@@ -27,6 +27,8 @@ impl Csaroptions {
             }
             Err(e) => {
                 println!("Not listing --->>>");
+                println!("Error: {:?}", e);
+
             }
          }}
     }
