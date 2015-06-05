@@ -99,7 +99,9 @@ let setPath = format!("{}/megam.toml", y.to_string());
                 Ok(file) => file,
                 Err(..) => panic!("Something is wrong!"),
              };
-             let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}", e, a);
+             let mut host = "http://localhost:9000".to_string();
+             let mut version = "/v2".to_string();
+             let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}\n\n[api]\n\nhost = {:?}\nversion = {:?}", e, a, host, version);
              println!("{}",
              Blue.paint("'megam.toml' file is created in your home directory"));
 

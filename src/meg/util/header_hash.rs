@@ -50,14 +50,16 @@ let data = we.load(path);
 let value: toml::Value = data.unwrap();
 let email = value.lookup("account.email").unwrap().as_str().unwrap();
 let api_key = value.lookup("account.api_key").unwrap().as_str().unwrap();
+let host = value.lookup("api.host").unwrap().as_str().unwrap();
+let version = value.lookup("api.version").unwrap().as_str().unwrap();
 
 
 
  let mut apiObjt: api_options = api_options {
 Email: email.to_string(),
 Apikey: api_key.to_string(),
-Host: "fefe".to_string(),
-Version: "asd".to_string(),
+Host: host.to_string(),
+Version: version.to_string(),
 };
  Ok(apiObjt)
  }
