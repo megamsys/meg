@@ -15,6 +15,8 @@ use std::fs::OpenOptions;
 use std::io::BufWriter;
 use std::marker::Copy;
 use std::clone::Clone;
+use std::str::from_utf8;
+
 
 use self::rand::{OsRng, Rng};
 
@@ -29,6 +31,7 @@ use self::megam_api::api::Options as api_options;
 use util::header_hash as head;
 
 
+
 #[derive(PartialEq, Clone, Debug)]
 pub struct Createoptions {
 pub email: String,
@@ -39,17 +42,17 @@ impl Createoptions {
 
    pub fn create(&self) {
 
+   let mut api_key = apikeyGen();
+
     let apiObj = api_options {
-        Email: "sample@megam.io".to_string(),
-        Apikey: "APIKEYMEGAMIO".to_string(),
+        Email: self.email.to_string(),
+        Apikey: api_key.to_string(),
         Host: "http://localhost:9000".to_string(),
         Version: "/v2".to_string(),
         };
 
          let mut opts = Account::new();
          opts.email = self.email.clone();
-         opts.password = "123".to_string();
-         let mut api_key = apikeyGen();
 
         opts.api_key = api_key.to_string();
         let out = opts.create(json::encode(&apiObj).unwrap());
@@ -84,7 +87,12 @@ pub fn apikeyGen() -> String {
 
 }
 pub fn createFile(e: &String, a: &String) {
-    let path = Path::new("/home/yeshwanth/megam.toml");
+
+let mut x = env::home_dir().unwrap();
+let mut y = x.to_str().unwrap();
+let setPath = format!("{}/megam.toml", y.to_string());
+
+    let path = Path::new(&setPath);
             let mut options = OpenOptions::new();
             options.write(true).create(true);
             let file = match options.open(path) {

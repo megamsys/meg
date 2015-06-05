@@ -31,14 +31,19 @@ pub struct CliError {
 pub type CliResult<T> = StdResult<T, CliError>;
 
 impl CliError {
-    
+
 }
 
 
 
 pub fn apiObj() -> Result<api_options, CliError> {
 
-let mut path = Path::new("/home/yeshwanth/megam.toml").to_str().unwrap();
+
+let mut x = env::home_dir().unwrap();
+let mut y = x.to_str().unwrap();
+let setPath = format!("{}/megam.toml", y.to_string());
+
+let mut path = Path::new(&setPath).to_str().unwrap();
 let we = Configz { rand: "sample".to_string()};
 let data = we.load(path);
 
@@ -46,11 +51,13 @@ let value: toml::Value = data.unwrap();
 let email = value.lookup("account.email").unwrap().as_str().unwrap();
 let api_key = value.lookup("account.api_key").unwrap().as_str().unwrap();
 
+
+
  let mut apiObjt: api_options = api_options {
 Email: email.to_string(),
 Apikey: api_key.to_string(),
-Host: "http://localhost:9000".to_string(),
-Version: "/v2".to_string(),
+Host: "fefe".to_string(),
+Version: "asd".to_string(),
 };
  Ok(apiObjt)
  }

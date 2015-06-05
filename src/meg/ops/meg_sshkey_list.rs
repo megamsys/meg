@@ -37,18 +37,18 @@ impl SSHkeyoption {
            Green.bold().paint("\t\t\t\tListing your SSHKeys\n"));
            let mut a = Printer::new();
            let mut header = Vec::new();
-           header.push("Id".to_string());
            header.push("Name".to_string());
            header.push("Key".to_string());
+           header.push("Created at".to_string());
            a.set_header(header);
             let mut parent = Vec::new();
 
            for x in v.iter() {
 
                let mut child = Vec::new();
-               child.push(x.id.to_string());
                child.push(x.name.to_string());
                child.push(x.path.to_string());
+               child.push(x.created_at.to_string());
                 parent.push(child);
            }
              a.set_body(parent);
