@@ -1,7 +1,7 @@
 [project]
 name = "meg"
 version = "0.1.0"
-authors = ["Kishorekumar Neelamegam <nkishore@megam.io>"]
+authors = ["Yeswanth Kumar <getyesh@megam.io>, Kishorekumar Neelamegam <nkishore@megam.io>"]
 
 [lib]
 name = "meg"
@@ -19,7 +19,7 @@ libc = "0.1.8"
 megam_api = "0.1.8"
 rand = "0.3.8"
 term-painter = "0.1.1"
-megam_rustyprint = "0.1.1"
+megam_rustyprint = "0.2.0"
 
 [dev-dependencies]
 tempdir = "0.3.4"

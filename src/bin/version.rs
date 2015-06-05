@@ -1,6 +1,3 @@
-use std::env;
-
-use turbo;
 use turbo::util::{CliResult, Config};
 
 

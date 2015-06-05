@@ -4,19 +4,14 @@ extern crate toml;
 extern crate rustc_serialize;
 extern crate megam_rustyprint;
 
-use std::path::Path;
-
 use self::megam_rustyprint::Printer;
 use self::megam_api::api::Api;
-use self::megam_api::api::Options as api_options;
 use self::megam_api::util::sshkeys::SSHKey;
 use self::rustc_serialize::json;
 
 use self::term_painter::ToStyle;
 use self::term_painter::Color::*;
-use self::term_painter::Attr::*;
 
-use util::parse_toml::Configz;
 use util::header_hash as head;
 
 
@@ -26,11 +21,9 @@ pub struct SSHkeyoption;
 impl SSHkeyoption {
 
    pub fn list(&self) {
-
-
-      let mut opts = SSHKey::new();
-      let mut apiObj = head::apiObj().unwrap();
-      let out = opts.list(json::encode(&apiObj).unwrap());
+      let opts = SSHKey::new();
+      let api_call = head::api_call().unwrap();
+      let out = opts.list(json::encode(&api_call).unwrap());
     match out {
        Ok(v) => {
           println!("{}",

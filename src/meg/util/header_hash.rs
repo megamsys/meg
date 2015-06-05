@@ -6,17 +6,9 @@ extern crate rustc_serialize;
 extern crate term_painter;
 extern crate toml;
 
-use std::env;
-use std::io;
-use std::io::prelude::*;
-use std::fs::File;
 use std::path::Path;
 use std::fs::OpenOptions;
-use std::io::BufWriter;
-use std::marker::Copy;
-use std::clone::Clone;
 use std::result::Result as StdResult;
-use std::error::Error;
 
 use util::parse_toml::Configz;
 use self::megam_api::api::Options as api_options;
@@ -36,14 +28,18 @@ impl CliError {
 
 
 
-pub fn apiObj() -> Result<api_options, CliError> {
+pub fn api_call() -> Result<api_options, CliError> {
 
+<<<<<<< HEAD
 
 let mut x = env::home_dir().unwrap();
 let mut y = x.to_str().unwrap();
 let setPath = format!("{}/megam.toml", y.to_string());
 
 let mut path = Path::new(&setPath).to_str().unwrap();
+=======
+let path = Path::new("/home/yeshwanth/megam.toml").to_str().unwrap();
+>>>>>>> origin/master
 let we = Configz { rand: "sample".to_string()};
 let data = we.load(path);
 
@@ -55,11 +51,11 @@ let version = value.lookup("api.version").unwrap().as_str().unwrap();
 
 
 
- let mut apiObjt: api_options = api_options {
+ let api_run_hash: api_options = api_options {
 Email: email.to_string(),
 Apikey: api_key.to_string(),
 Host: host.to_string(),
 Version: version.to_string(),
 };
- Ok(apiObjt)
+ Ok(api_run_hash)
  }
