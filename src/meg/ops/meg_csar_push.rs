@@ -11,6 +11,7 @@ use self::term_painter::Color::*;
 
 use megam_api::api::Api;
 use self::megam_api::util::csars::Csar;
+use self::megam_api::util::errors::MegResponse;
 use self::rustc_serialize::json;
 use util::header_hash as head;
 use std::str::from_utf8;
@@ -31,14 +32,15 @@ impl Csaroptions {
         let out = opts.push(json::encode(&api_call).unwrap(), data.to_string());
          match out {
            Ok(v) => {
-           println!("{}",
-           Green.bold().paint("Pushed it... "));
+               let x = json::decode::<MegResponse>(&v).unwrap();
+               println!("{}",
+               Green.paint("Successfully pushed your CSAR"));
+
+              println!("----\nCode: {:?}\nMessage: {:?}\n----", x.code, x.msg);
         }
           Err(e) => {
            println!("{}",
-           Red.bold().paint("Oops! some error! coudnt push the csar, contact support@megam.io. "));
-           println!("{:?}",
-           Red.bold().paint(e));
+           Red.bold().paint("\nOops! some error! coudnt push the csar, contact support@megam.io\n"));
          }};
 }
 }

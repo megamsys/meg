@@ -29,9 +29,6 @@ Options:
 ";
 
 pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
-    println!("executing; cmd=meg-version; args={:?}", env::args().collect::<Vec<_>>());
-
-    println!("{:?}", options.arg_file);
 
     let vec = env::args().collect::<Vec<_>>();
     for x in vec.iter() {

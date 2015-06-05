@@ -56,11 +56,7 @@ macro_rules! cli_try {
 pub type CliResult<T> = StdResult<T, CliError>;
 
 impl CliError {
-    //fn from_err(err: &Error) -> CliError {
-    //    CliError {
-    //        desc: err.description().to_string()
-    //    }
-    //}
+
 }
 
 
@@ -72,18 +68,6 @@ impl CConfig {
             path);
         let mut buf = String::new();
         file.read_to_string(&mut buf).unwrap();
-        //let mut reader = BufReader::new(buf.as_bytes());
-        //let mut data = from_utf8(buf.as_bytes());
-        //let result = YamlLoader::load_from_str(from_utf8(buf.as_bytes()).unwrap()).unwrap();
-        /*let value = try!(result.map_err(|errs| {
-            let mut desc = String::new();
-            for err in errs {
-                desc.push_str(err.description());
-                desc.push('\n');
-            }
-            CliError { desc: desc }
-        })); */
-
-       Ok(buf)
+        Ok(buf)
     }
 }

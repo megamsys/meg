@@ -60,11 +60,7 @@ macro_rules! cli_try {
 pub type CliResult<T> = StdResult<T, CliError>;
 
 impl CliError {
-    //fn from_err(err: &Error) -> CliError {
-    //    CliError {
-    //        desc: err.description().to_string()
-    //    }
-    //}
+    
 }
 
 
@@ -77,7 +73,6 @@ impl Configz {
         let mut buf = String::new();
         file.read_to_string(&mut buf).unwrap();
         let result: Result<toml::Value, Vec<toml::ParserError>> = buf.parse();
-        println!("--->>{:?}", result);
         let value: toml::Value = try!(result.map_err(|errs| {
             let mut desc = String::new();
             for err in errs {

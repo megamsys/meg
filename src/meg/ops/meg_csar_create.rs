@@ -14,7 +14,9 @@ use self::term_painter::Color::*;
 
 use megam_api::api::Api;
 use self::megam_api::util::csars::Csar;
+use self::megam_api::util::errors::MegResponse;
 use util::header_hash as head;
+
 
 
 use self::rustc_serialize::json;
@@ -45,20 +47,24 @@ impl CsarCoptions {
            let out = opts.create(json::encode(&api_call).unwrap());
            match out {
               Ok(v) => {
-               println!("{:?}", v);
+               let x = json::decode::<MegResponse>(&v).unwrap();
+               println!("{}",
+               Green.paint("Successfully created your CSAR"));
+
+              println!("----\nCode: {:?}\nMessage: {:?}\n----", x.code, x.msg);
            }
 
            Err(e) => {
-               println!("{:?}", e);
+
                println!("{}",
-               Red.bold().paint("Error: Not able to create CSAR"));
+               Red.bold().paint("Error: Not able to create CSAR.\nPlease contact support@megam.io"));
+
            }};
     }
 }
 
 
 impl CreateCSAR for CsarCoptions {
-    // Replace `Self` with the implementor type: `Account`
     fn new() -> CsarCoptions {
         CsarCoptions { file: "".to_string() }
     }
