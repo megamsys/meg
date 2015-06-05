@@ -307,7 +307,9 @@ install_toolchain() {
 
     # Extract the toolchain
     say "extracting installer"
-    run tar xzf "$_installer" -C "$_workdir"
+    chmod 755 "$_installer"
+    ls -la
+    run tar -xvf "$_installer" -C "$_workdir"
     if [ $? != 0 ]; then
 	verbose_say "failed to extract installer"
 	return 1
@@ -318,7 +320,7 @@ install_toolchain() {
     verbose_say "installing meg to '$_prefix'"
 
     say "installing meg"
-    cp $_installer_dir/meg $_prefix
+    cp $_workdir/meg $_prefix
 
     if [ $? != 0 ]; then
 	verbose_say "failed to install meg"
