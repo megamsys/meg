@@ -1,4 +1,7 @@
 extern crate meg;
+extern crate log;
+
+use log::*;
 
 use std::env;
 use std::clone::Clone;
@@ -12,35 +15,39 @@ use self::meg::ops::meg_account_show as Show;
 
 #[derive(RustcDecodable, Clone)]
 pub struct Options {
-pub arg_email: String,
+pub flag_create: String,
 pub flag_show: bool,
+pub flag_verbose: bool,
 }
 
 pub const USAGE: &'static str = "
 Usage:
-    meg account [options] [<email>]
+    meg account [options]
 
 
 Options:
     -h, --help               Print this message
-    --create                 Provide an email to create a new account
-    --show                   Provide an email to show the account
+    --create EMAIL           Provide an email to create a new account
+    --show                   View your account details
     -v, --verbose            Use verbose output
 ";
 
 
-pub fn execute(options: Options, _: &Config) -> CliResult<Option<()>> {
+pub fn execute(options: Options, config: &Config) -> CliResult<Option<()>> {
+    debug!("executing; cmd=meg-account; args={:?}", env::args().collect::<Vec<_>>());
+
+    config.shell().set_verbose(options.flag_verbose);
 
          let vec = env::args().collect::<Vec<_>>();
       for x in vec.iter() {
         if x == "--create" {
              let mut acct: Act::Createoptions  = Act::CreateAcc::new();
-             acct.email = options.arg_email.clone();
+             acct.email = options.flag_create.clone();
              acct.create();
 
         } else if x == "--show" {
             let mut acct: Show::Showoptions  = Show::ShowAcc::new(); //Not reqd - to expand later if
-            acct.email = options.arg_email.clone();                  //multiple accounts needs to be showed
+            acct.email = options.flag_create.clone();                  //multiple accounts needs to be showed
             acct.show();
 
      }

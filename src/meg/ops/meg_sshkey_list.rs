@@ -51,7 +51,7 @@ impl SSHkeyoption {
 
     Err(e) => {
         println!("{}",
-        Red.bold().paint("Error: Not able to list"));
+        Red.bold().paint("Error: No SSHKeys "));
     }};
    }
 }

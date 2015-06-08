@@ -1,14 +1,12 @@
-//#![cfg_attr(unix, feature(fs_ext))]
-
-//#![feature(fs, fs_time, fs_ext)]
-
 
 extern crate env_logger;
 extern crate rustc_serialize;
 extern crate toml;
 extern crate turbo;
 extern crate meg;
-//#[macro_use] extern crate log;
+extern crate term_painter;
+
+#[macro_use] extern crate log;
 
 use std::collections::BTreeSet;
 use std::env;
@@ -21,6 +19,9 @@ use turbo::turbo::{execute_main_without_stdin, handle_error, shell};
 use turbo::core::MultiShell;
 use turbo::util::{CliError, CliResult, Config};
 use meg::util::{lev_distance};
+use self::term_painter::Color::*;
+use self::term_painter::ToStyle;
+
 
 #[derive(RustcDecodable)]
 #[derive(RustcEncodable)]
@@ -36,6 +37,7 @@ struct Flags {
 
 
 const USAGE: &'static str = "
+
 Megam command line
 
 Usage:
@@ -44,13 +46,16 @@ Usage:
 
 Options:
     -h, --help       Display this message
-    -V, --version    Print version info and exit
+    version          Print version info and exit
     --list           List installed commands
     -v, --verbose    Use verbose output
 
-Some common meg commands are:
+ meg commands are:
     ahoy       Ping the status of megam.
     account    Create an account with megam.
+    sshkey     Create SSHKey with megam.
+    csar       Create apps/services & torpedos
+
 
 See 'meg help <command>' for more information on a specific command.
 ";
@@ -61,12 +66,13 @@ fn main() {
 }
 
 macro_rules! each_subcommand{ ($mac:ident) => ({
-    $mac!(version);
     $mac!(help);
     $mac!(ahoy);
     $mac!(account);
     $mac!(sshkey);
     $mac!(csar);
+    $mac!(version);
+
 }) }
 
 /**
@@ -77,7 +83,8 @@ macro_rules! each_subcommand{ ($mac:ident) => ({
 fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
     config.shell().set_verbose(flags.flag_verbose);
     if flags.flag_list {
-        println!("Installed Commands:");
+        println!("{}",
+        Green.paint("Installed commands:"));
         for command in list_commands().into_iter() {
             println!("{}", command);
         };
@@ -115,6 +122,42 @@ fn execute(flags: Flags, config: &Config) -> CliResult<Option<()>> {
         // For all other invocations, we're of the form `meg foo args...`. We
         // use the exact environment arguments to preserve tokens like `--` for
         // example.
+
+
+
+        "account" if flags.arg_args.is_empty() => {
+            config.shell().set_verbose(true);
+            let args = &["meg".to_string(), "help".to_string(), "account".to_string()];
+            let r = turbo::turbo::call_main_without_stdin(execute, config, USAGE, args,
+                                                   false);
+
+            turbo::turbo::process_executed(r, &mut config.shell());
+            return Ok(None)
+        }
+
+
+        "sshkey" if flags.arg_args.is_empty() => {
+            config.shell().set_verbose(true);
+            let args = &["meg".to_string(), "help".to_string(), "sshkey".to_string()];
+            let r = turbo::turbo::call_main_without_stdin(execute, config, USAGE, args,
+                                                           false);
+
+            turbo::turbo::process_executed(r, &mut config.shell());
+            return Ok(None)
+                }
+
+        "csar" if flags.arg_args.is_empty() => {
+                    config.shell().set_verbose(true);
+                    let args = &["meg".to_string(), "help".to_string(), "csar".to_string()];
+                    let r = turbo::turbo::call_main_without_stdin(execute, config, USAGE, args,
+                                                                   false);
+
+                    turbo::turbo::process_executed(r, &mut config.shell());
+                    return Ok(None)
+                        }
+
+
+
         _ => env::args().collect(),
     };
 

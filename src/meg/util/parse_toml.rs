@@ -60,7 +60,7 @@ macro_rules! cli_try {
 pub type CliResult<T> = StdResult<T, CliError>;
 
 impl CliError {
-    
+
 }
 
 
@@ -79,6 +79,7 @@ impl Configz {
                 desc.push_str(err.description());
                 desc.push('\n');
             }
+
             CliError { desc: desc }
         }));
        Ok(value)

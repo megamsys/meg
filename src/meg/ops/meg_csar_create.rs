@@ -28,13 +28,9 @@ pub struct CsarCoptions {
 pub file: String,
 }
 
-
-
 impl CsarCoptions {
 
-
    pub fn create(&self) {
-
 
     let  file = from_utf8(self.file.as_bytes()).unwrap();
     let  path = Path::new(file).to_str().unwrap();
@@ -43,7 +39,7 @@ impl CsarCoptions {
        let mut opts = Csar::new();
       let api_call = head::api_call().unwrap();
 
-           opts.desc = data.unwrap();
+           opts.desc = data.unwrap_or("Error".to_string());
            let out = opts.create(json::encode(&api_call).unwrap());
            match out {
               Ok(v) => {
@@ -51,13 +47,12 @@ impl CsarCoptions {
                println!("{}",
                Green.paint("Successfully created your CSAR"));
 
-              println!("----\nCode: {:?}\nMessage: {:?}\n----", x.code, x.msg);
+              println!("----\n\nCode: {:?}\nMessage: {:?}\n\n----", x.code, x.msg);
            }
 
            Err(e) => {
-
                println!("{}",
-               Red.bold().paint("Error: Not able to create CSAR.\nPlease contact support@megam.io"));
+               Red.bold().paint("Error: Not able to create CSAR."));
 
            }};
     }

@@ -33,11 +33,13 @@ pub fn api_call() -> Result<api_options, CliError> {
 
 let x = env::home_dir().unwrap();
 let y = x.to_str().unwrap();
-let set_path = format!("{}/megam.toml", y.to_string());
+let set_path = format!("{}/.megam/megam.toml", y.to_string());
 
 let path = Path::new(&set_path).to_str().unwrap();
 let we = Configz { rand: "sample".to_string()};
 let data = we.load(path);
+
+
 
 let value: toml::Value = data.unwrap();
 let email = value.lookup("account.email").unwrap().as_str().unwrap();
