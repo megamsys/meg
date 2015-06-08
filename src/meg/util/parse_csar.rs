@@ -47,7 +47,7 @@ macro_rules! cli_try {
     );
     ($op:expr, $fmt:expr, $($args:tt)*) => (
         try!($op.map_err(|err| CliError {
-            desc: format!($fmt, $($args)*, err)
+           desc: format!($fmt, $($args)*, err)
         }))
     );
 }

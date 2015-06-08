@@ -40,7 +40,7 @@ impl Csaroptions {
         }
           Err(e) => {
            println!("{}",
-           Red.bold().paint("\nOops! some error! coudnt push the csar, contact support@megam.io\n"));
+           Red.bold().paint("\nError: couldn't push csar.\n"));
          }};
 }
 }

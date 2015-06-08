@@ -3,7 +3,7 @@
 #![cfg_attr(test, deny(warnings))]
 
 #[cfg(test)] extern crate hamcrest;
-//#[macro_use] extern crate log;
+#[macro_use] extern crate log;
 extern crate docopt;
 extern crate megam_api;
 

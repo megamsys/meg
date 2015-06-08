@@ -1,4 +1,11 @@
+use std::env;
+
+use turbo;
 use turbo::util::{CliResult, Config};
+extern crate term_painter;
+
+use self::term_painter::ToStyle;
+use self::term_painter::Color::*;
 
 
 #[derive(RustcDecodable)]
@@ -16,21 +23,6 @@ Options:
 pub fn execute(_: Options, _: &Config) -> CliResult<Option<()>> {
     //debug!("executing; cmd=meg-version; args={:?}", env::args().collect::<Vec<_>>());
 
-    println!("{}", self::version());
-
-    Ok(None)
-}
-
-pub fn version() -> String {
-
-    //println!("Commencing yak shaving for 0$ {}", option_env!("MEG_PKG_VERSION_MAJOR"));
-//println!("Inside version----------00000000000000000000000000000000000000--->>s");
-    format!("Megam Cloud CLI {} - Deploy apps/services seamlessly", match option_env!("CFG_VERSION") {
-        Some(s) =>  s.to_string(),
-        None    =>   format!("{}.{}.{}{}",
-                        env!("CARGO_PKG_VERSION_MAJOR"),
-                        env!("CARGO_PKG_VERSION_MINOR"),
-                        env!("CARGO_PKG_VERSION_PATCH"),
-                        env!("CARGO_PKG_VERSION_PRE"))
-    })
+    println!("{}",
+     Green.bold().paint("\nMegam CLI - v0.1.0 - Launch torpedos(VMs), apps and services seamlessly on megam platform\n"));    Ok(None)
 }

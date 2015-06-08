@@ -1,5 +1,5 @@
 
-use turbo   ::util::{CliResult, CliError, Config};
+use turbo::util::{CliResult, CliError, Config};
 
 #[derive(RustcDecodable)]
 struct Options;

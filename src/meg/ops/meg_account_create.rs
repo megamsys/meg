@@ -63,6 +63,8 @@ impl Createoptions {
     Err(e) => {
         println!("{}",
         Red.bold().paint("Oops! account was not created. "));
+        println!("{}",
+        Yellow.bold().paint("Please check the host file at /home/<usr>/.megam/megam.toml "));
     }}
    }
 }
@@ -83,7 +85,7 @@ pub fn create_file(e: &String, a: &String) {
 
 let x = env::home_dir().unwrap();
 let y = x.to_str().unwrap();
-let set_path = format!("{}/megam.toml", y.to_string());
+let set_path = format!("{}/.megam/megam.toml", y.to_string());
 
     let path = Path::new(&set_path);
 
@@ -97,7 +99,7 @@ let set_path = format!("{}/megam.toml", y.to_string());
              let version = "/v2".to_string();
              let data = format!("[account]\n\nemail = {:?}\napi_key = {:?}\n\n[api]\n\nhost = {:?}\nversion = {:?}", e, a, host, version);
              println!("{}",
-             Blue.paint("'megam.toml' file is created in your home directory"));
+             Blue.paint("'megam.toml' file is created in /home/<usr>/.megam/megam.toml"));
 
           let mut writer = BufWriter::new(&file);
           writer.write(data.as_bytes());
