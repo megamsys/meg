@@ -1,12 +1,12 @@
 meg installs your apps and services in [Megam](https://www.megam.io).
 
-Learn more at http://doc.megam.io/.
+Learn more at https://megam.io/.
 
 ## Installing meg in linux
 
 
 ```sh
-\curl -sSL https://get.megam.io.io | bash -s stable
+\curl -sSL https://get.megam.io | bash -s stable
 ```
 
 ## Compiling meg
@@ -25,7 +25,7 @@ cargo build
 
 ## Commands
 
-meg is designed to be extensible with new subcommands without having to modify meg itself. See [the devcenter page](https://devcenter.megam.io) for more details and a list of known community-developed subcommands.
+meg is designed to be extensible with new subcommands without having to modify meg itself. See [the devcenter page](https://megam.io) for more details and a list of known community-developed subcommands.
 
 We are glad to help if you have questions, or request for new features..
 
