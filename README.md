@@ -6,7 +6,7 @@ Learn more at https://megam.io/.
 
 
 ```sh
-\curl -sSL https://get.megam.io | bash -s stable
+# ~~https://get.megam.io~~ (stale)
 ```
 
 ## Compiling meg
